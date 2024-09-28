@@ -1,0 +1,153 @@
+<body>
+  <div class="wrapper">
+    <canvas id="canvas"></canvas>
+    <div class="note">
+    </div>
+  </div>
+</body>
+
+<style>
+
+body {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 1rem;
+  background-color: #000000;
+  color: #506678;
+  padding: 15px;
+}
+  
+@media (min-width: 960px) {
+  body {
+    padding: 25px;
+  }
+
+  .note {
+    padding: 25px 0;
+  }
+}
+</style>
+
+
+
+
+
+
+
+
+
+<script>
+const colors = {
+  purple: {
+    default: "rgba(149, 76, 233, 1)",
+    half: "rgba(149, 76, 233, 0.5)",
+    quarter: "rgba(149, 76, 233, 0.25)",
+    zero: "rgba(149, 76, 233, 0)"
+  },
+  indigo: {
+    default: "rgba(80, 102, 120, 1)",
+    quarter: "rgba(80, 102, 120, 0.25)"
+  }
+};
+
+// Couleur du texte (modifiable)
+const textColor = "#ffffff";  // Exemple : rouge
+
+// Nombre de jours en septembre pour chaque année
+const daysInSeptember = [3, 10, 29, 20, 1]; // Jours pour chaque année
+
+// Labels pour l'axe X (années)
+const labels = ["2020", "2021", "2022", "2023", "2024"];
+
+const ctx = document.getElementById("canvas").getContext("2d");
+ctx.canvas.height = 100;
+
+const gradient = ctx.createLinearGradient(0, 25, 0, 300);
+gradient.addColorStop(0, colors.purple.half);
+gradient.addColorStop(0.35, colors.purple.quarter);
+gradient.addColorStop(1, colors.purple.zero);
+
+const options = {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        fill: true,
+        backgroundColor: gradient,
+        pointBackgroundColor: colors.purple.default,
+        borderColor: colors.purple.default,
+        data: daysInSeptember,
+        lineTension: 0.2,
+        borderWidth: 2,
+        pointRadius: 3
+        
+      }
+    ]
+  },
+  options: {
+    layout: {
+      padding: 10
+    },
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      xAxes: [
+        {
+          gridLines: {
+            display: false
+          },
+          ticks: {
+            padding: 10,
+            autoSkip: false,
+            maxRotation: 15,
+            minRotation: 15
+          }
+        }
+      ],
+      y: {
+        title: {
+          display: true,
+          text: "Jours en Septembre",
+          color: textColor, // Appliquer la couleur du texte pour le titre Y
+          padding: {
+            top: 10,
+            bottom: 10
+          }
+        },
+        min: 0,
+        max: 30,
+        ticks: {
+          beginAtZero: true,
+          stepSize: 1,
+          padding: 10,
+          color: textColor, // Appliquer la couleur du texte pour les ticks Y
+          callback: function(value) { 
+            return value; 
+          }
+        },
+        grid: {
+          display: true,
+          color: colors.indigo.quarter
+        }
+      }
+    }
+  }
+};
+  
+  
+
+window.onload = function () {
+  window.myLine = new Chart(ctx, options);
+   // Appliquer la couleur du texte globalement
+  Chart.defaults.font.family = "Fira Sans";
+  
+  // Appliquer la couleur du texte à l'ensemble du graphique
+  ctx.fillStyle = 'textColor'; // Pour s'assurer que le texte est rouge
+  Chart.defaults.color = 'textColor';
+};
+
+</script>
